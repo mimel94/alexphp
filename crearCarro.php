@@ -2,15 +2,18 @@
 <html lang="en">
 <?php
         include 'base/head.html';
-        include  'coneccionBD.php';
-        $coneccion = mysqli_connect($host, $user, $pw, $bd) or die ("problemas al conectar el host");
-        mysqli_select_db($coneccion, $bd) or die ("error al conectar con la base de datos");
+        include  'conexionBD.php';
+
         /*consulta*/
-        $consultaMarca = "select id, nombre from marca order by id asc";
-        $consultaTipoCarro = "select id, nombre from tipo_carro order by id asc";
+        $consultaMarca =$base->query("select id, nombre from marca order by id asc");
+
+        $consultaTipoCarro =$base->query("select id, nombre from tipo_carro order by id asc");
+
         /*resultado*/
-        $resultadoMarca = mysqli_query($coneccion, $consultaMarca);
-        $resultadoTipoCarro = mysqli_query($coneccion, $consultaTipoCarro);
+
+        $resultadoMarca = $consultaMarca->fetchAll(PDO::FETCH_OBJ);
+
+        $resultadoTipoCarro = $consultaTipoCarro->fetchAll(PDO::FETCH_OBJ);
 ?>
 <body>
  <header>
@@ -45,10 +48,9 @@
                                  <div class="row">
                                      <div class="col-md-6 input-field">
                                          <select class="form-control" name="marca">
-
                                              <?php
-                                                     while($fila=mysqli_fetch_row($resultadoMarca)){
-                                                        echo "<option value='".$fila['0']."'>".$fila['1']."</option>";
+                                                     foreach($resultadoMarca as $resultado){
+                                                        echo "<option value='".$resultado->id."'>".$resultado->nombre."</option>";
                                                      }
                                              ?>
                                          </select>
@@ -56,10 +58,10 @@
                                      <div class="col-md-6 input-field">
                                          <select class="form-control" name="marca" >
                                              <?php
-                                                     while($fila=mysqli_fetch_row($resultadoTipoCarro)){
-                                                     echo "<option value='".$fila['0']."'>".$fila['1']."</option>";
+                                                     foreach($resultadoTipoCarro as $resultado){
+                                                     echo "<option value='".$resultado->id."'>".$resultado->nombre."</option>";
                                                      }
-                                                     ?>
+                                             ?>
                                          </select>
                                      </div>
                                  </div>
