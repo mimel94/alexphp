@@ -3,8 +3,19 @@
 <?php include 'base/head.html';?>
 <body id="top">
     <header>
-        <?php include 'base/nav.html';?>
-        <?php include 'base/section.html';?>
+        <?php
+                include 'base/nav.html';
+                include 'base/section.html';
+                include  'conexionBD.php';
+                /*consulta*/
+                $consultaCarros = $base->query("select carro.id as id, carro.nombre as nombre, modelo, marca.nombre as marca, tipo_carro.nombre as tipo, precio, descripcion
+                from carro inner join marca on carro.marca_id=marca.id
+                inner join tipo_carro on carro.tipo_carro_id=tipo_carro.id order by carro.id asc;");
+
+                /*resultado*/
+                $resultadoCarros = $consultaCarros->fetchAll(PDO::FETCH_OBJ);
+
+        ?>
     </header>
     <div id="content">
 
@@ -49,46 +60,25 @@
                 </div>
                 <!-- Portfolio Gallery Grid -->
                 <div class="row wow fadeIn">
+                    <?php
+                            foreach($resultadoCarros as $carro):?>
+
                     <div class="column col-lg-4 col-md-12 mb-r">
                         <div class=" wow zoomIn card ">
                             <img src="img/cars/prado.jpg" alt="Mountains" style="width:100%">
                             <br/>
-                            <h3>Toyota prado</h3>
-                            <p>Descripcion</p>
-                            <p>$500.000.000</p>
+                            <h3><?php echo $carro->nombre; ?></h3>
+                            <p>Modelo <?php echo $carro->modelo; ?></p>
+                            <p><?php echo $carro->marca; ?></p>
+                            <p>Tipo <?php echo $carro->tipo; ?></p>
+                            <p>$<?php echo $carro->precio; ?></p>
+                            <p><?php echo $carro->descripcion; ?></p>
                             <p><a class="btn btn-outline-black mt-5"> Comprar</a></p>
                         </div>
                     </div>
-                    <div class="column col-lg-4 col-md-12 mb-r">
-                        <div class=" wow zoomIn card ">
-                            <img src="img/cars/prado.jpg" alt="Mountains" style="width:100%">
-                            <br/>
-                            <h3>Toyota prado</h3>
-                            <p>Descripcion</p>
-                            <p>$500.000.000</p>
-                            <p><a class="btn btn-outline-black mt-5"> Comprar</a></p>
-                        </div>
-                    </div>
-                    <div class="column col-lg-4 col-md-12 mb-r">
-                        <div class=" wow zoomIn card ">
-                            <img src="img/cars/prado.jpg" alt="Mountains" style="width:100%">
-                            <br/>
-                            <h3>Toyota prado</h3>
-                            <p>Descripcion</p>
-                            <p>$500.000.000</p>
-                            <p><a class="btn btn-outline-black mt-5"> Comprar</a></p>
-                        </div>
-                    </div>
-                    <div class="column col-lg-4 col-md-12 mb-r">
-                        <div class=" wow zoomIn card ">
-                            <img src="img/cars/prado.jpg" alt="Mountains" style="width:100%">
-                            <br/>
-                            <h3>Toyota prado</h3>
-                            <p>Descripcion</p>
-                            <p>$500.000.000</p>
-                            <p><a class="btn btn-outline-black mt-5"> Comprar</a></p>
-                        </div>
-                    </div>
+                    <?php
+                            endforeach;
+                    ?>
                 </div>
 
                 </div>

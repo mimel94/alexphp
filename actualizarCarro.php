@@ -4,20 +4,30 @@
         include 'base/head.html';
         include  'conexionBD.php';
 
-        /*consulta*/
-        $consultaMarca =$base->query("select id, nombre from marca order by id asc");
+        if(!isset($_POST["actualizar"])){
 
-        $consultaTipoCarro =$base->query("select id, nombre from tipo_carro order by id asc");
+            $id = $_GET["id"];
 
-        /*resultado*/
+            /*consulta*/
+            $consultaMarca =$base->query("select id, nombre from marca order by id asc");
 
-        $resultadoMarca = $consultaMarca->fetchAll(PDO::FETCH_OBJ);
+            $consultaTipoCarro =$base->query("select id, nombre from tipo_carro order by id asc");
 
-        $resultadoTipoCarro = $consultaTipoCarro->fetchAll(PDO::FETCH_OBJ);
+            $consultaCarro =$base->query("select id, nombre, modelo, marca_id as marca, tipo_carro_id as tipo, precio, descripcion from carro
+                                        where id='$id'");
+
+            /*resultado*/
+
+            $resultadoCarro = $consultaCarro->fetch(PDO::FETCH_ASSOC);
 
 
-        if(isset($_POST["crear"])){
+            $resultadoMarca = $consultaMarca->fetchAll(PDO::FETCH_OBJ);
 
+            $resultadoTipoCarro = $consultaTipoCarro->fetchAll(PDO::FETCH_OBJ);
+
+        }else{
+
+            $id = $_POST["id"];
             $nombre = $_POST["nombre"];
             $modelo = $_POST["modelo"];
             $marca = $_POST["marca"];
@@ -25,18 +35,18 @@
             $precio = $_POST["precio"];
             $descripcion = $_POST["descripcion"];
 
-            $sql = "insert into carro (nombre, modelo, marca_id, tipo_carro_id, precio, descripcion)
-                    values (:nombre, :modelo, :marca, :tipo, :precio, :descripcion)";
+            $sql="update carro set nombre=:nombre, modelo=:modelo, marca_id=:marca, tipo_carro_id=:tipo,
+                    precio=:precio, descripcion=:descripcion where id=:id";
 
             $resultado = $base->prepare($sql);
 
-            $resultado->execute(array(":nombre"=>$nombre, ":modelo"=>$modelo, ":marca"=>$marca, ":tipo"=>$tipo,
-                                        ":precio"=>$precio, ":descripcion"=>$descripcion));
+            $resultado->execute(array(":id"=>$id, ":nombre"=>$nombre, ":modelo"=>$modelo, ":marca"=>$marca,
+                                      ":tipo"=>$tipo, ":precio"=>$precio, ":descripcion"=>$descripcion));
 
             header("location:listarCarros.php");
 
         }
-?>
+        ?>
 <body>
 <header>
     <?php include 'base/nav.html';?>
@@ -56,13 +66,14 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="md-form">
-                                            <input class="form-control" id="nombre" type="text" name="nombre" required="required"/>
+                                            <input id="id" value="<?php echo $resultadoCarro['id']?>" type="hidden" name="id"/>
+                                            <input class="form-control" id="nombre" value="<?php echo $resultadoCarro['nombre']?>" type="text" name="nombre" required="required"/>
                                             <label for="name">Nombre del carro</label>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="md-form">
-                                            <input class="form-control" id="modelo"   type="text" name="modelo" required="required"/>
+                                            <input class="form-control" id="modelo"  value="<?php echo $resultadoCarro['modelo']?>" type="text" name="modelo" required="required"/>
                                             <label for="modelo">Modelo</label>
                                         </div>
                                     </div>
@@ -75,9 +86,9 @@
                                             <?php
                                                     foreach($resultadoMarca as $resultado){
                                                     if($resultadoCarro['marca'] == $resultado->id){
-                                                    echo "<option value='".$resultado->id."' selected='selected'>".$resultado->nombre."</option>";
+                                                        echo "<option value='".$resultado->id."' selected='selected'>".$resultado->nombre."</option>";
                                                     }else{
-                                                    echo "<option value='".$resultado->id."'>".$resultado->nombre."</option>";
+                                                        echo "<option value='".$resultado->id."'>".$resultado->nombre."</option>";
                                                     }
 
                                                     }
@@ -104,7 +115,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="md-form">
-                                            <input class="form-control" id="precio"  type="text" name="precio" required="required"/>
+                                            <input class="form-control" id="precio"  value="<?php echo $resultadoCarro['precio']?>" type="text" name="precio" required="required"/>
                                             <label for="precio">Precio</label>
                                         </div>
                                     </div>
@@ -112,26 +123,29 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="md-form">
-                                            <textarea class="md-textarea" id="descripcion" name="descripcion" required="required"> </textarea>
+                                            <textarea class="md-textarea" id="descripcion" value="" name="descripcion" required="required"> <?php echo $resultadoCarro['descripcion']?></textarea>
                                             <label for="descripcion">Descripción</label>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                <div class="center-on-small-only mb-4">
-                                    <button name="crear" class="btn btn-indigo ml-0" type="submit"><i class="fa fa-circle-o-notch" aria-hidden="true"></i> Crear</button>
+                                    <div class="center-on-small-only mb-4">
+                                        <button name="actualizar" class="btn btn-indigo ml-0" type="submit"><i class="fa fa-circle-o-notch" aria-hidden="true"></i> Actualizar</button>
+                                    </div>
+                                    </form>
+                                    <div class="center-on-small-only mb-4">
+                                        <a class="btn btn-indigo ml-0"href="listarCarros.php"> <i class="fa fa-circle-o-notch" aria-hidden="true"></i> Volver</a>
+                                    </div>
                                 </div>
-                            </form>
-                            <div class="center-on-small-only mb-4">
-                                <a class="btn btn-indigo ml-0"href="listarCarros.php"> <i class="fa fa-circle-o-notch" aria-hidden="true"></i> Listar carros</a>
-                            </div>
+
+
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </section>
 <?php include 'base/js.html';?>
 </body>
