@@ -73,7 +73,7 @@
                             <p>Tipo <?php echo $carro->tipo; ?></p>
                             <p>$<?php echo $carro->precio; ?></p>
                             <p><?php echo $carro->descripcion; ?></p>
-                            <p><a class="btn btn-outline-black mt-5"> Comprar</a></p>
+                            <p><a href="comprar.php?id=<?php echo $carro->id.'&'.'carro='.$carro->nombre;?>" class="btn btn-outline-black mt-5"> Comprar</a></p>
                         </div>
                     </div>
                     <?php
@@ -143,49 +143,22 @@
                     <div class="card mb-5 wow fadeInUp" data-wow-delay=".4s">
                         <div class="card-body p-5">
                             <div class="row">
-                                <div class="col-md-8">
-                                    <form action="https://formspree.io/youremail@example.com" method="POST">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="md-form">
-                                                    <input class="form-control" id="name" type="text" name="name" required="required"/>
-                                                    <label for="name">Tu nombre</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="md-form">
-                                                    <input class="form-control" id="email" type="text" name="_replyto" required="required"/>
-                                                    <label for="email">Tu correo</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="md-form">
-                                                    <input class="form-control" id="subject" type="text" name="subject" required="required"/>
-                                                    <label for="subject">Asunto</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="md-form">
-                                                    <textarea class="md-textarea" id="message" name="message" required="required"></textarea>
-                                                    <label for="message">Tu mensaje</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="center-on-small-only mb-4">
-                                            <button class="btn btn-indigo ml-0" type="submit"><i class="fa fa-paper-plane-o mr-2"></i> Enviar</button>
-                                        </div>
-                                    </form>
-                                </div>
                                 <div class="col-md-4">
                                     <ul class="list-unstyled text-center">
                                         <li class="mt-4"><i class="fa fa-map-marker indigo-text fa-2x"></i>
                                             <p class="mt-2">Avenida de las Americas 123, torre 2 apto 201, Bogota DC</p>
                                         </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul class="list-unstyled text-center">
                                         <li class="mt-4"><i class="fa fa-phone indigo-text fa-2x"></i>
                                             <p class="mt-2">+ 57 320 311 36 32</p>
                                         </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-4">
+                                    <ul class="list-unstyled text-center">
                                         <li class="mt-4"><i class="fa fa-envelope indigo-text fa-2x"></i>
                                             <p class="mt-2">contacto@vendeautosya.com</p>
                                         </li>

@@ -1,0 +1,93 @@
+<!-- Intro Section-->
+<?php
+    include  'conexionBD.php';
+
+
+     if(isset($_POST["comprar"])){
+        $id= $_POST["id"];
+        $nombre = $_POST["nombre"];
+        $correo = $_POST["correo"];
+        $telefono = $_POST["telefono"];
+        $ciudad = $_POST["ciudad"];
+
+        $sql = "insert into formulario_compra (nombre, correo, telefono, ciudad, carro_id)
+                    values (:nombre, :correo, :telefono, :ciudad, :carroId)";
+
+        $resultado = $base->prepare($sql);
+
+        $resultado->execute(array(":nombre"=>$nombre, ":correo"=>$correo, ":telefono"=>$telefono, ":ciudad"=>$ciudad,
+        ":carroId"=>$id));
+
+        header("location:index.php");
+
+     }else{
+        $id=$_GET['id'];
+        $nombreCarro=$_GET['carro'];
+    }
+?>
+
+<section id="contact" style="background-image:url('img/panorama-3094696_1920.jpg');">
+    <div class="rgba-black-strong py-5">
+        <div class="container">
+            <div class="wow fadeIn">
+                <h2 class="h1 text-white pt-5 pb-3 text-center">Compra tu vehiculo</h2>
+                <p class="text-white px-5 mb-5 pb-3 lead text-center">
+                    Queremos siempre darte la mejor atencion, llena todos tus datos acontinuación y un asesor se pondra en contacto
+                    inmediatamente con tigo.
+                </p>
+            </div>
+            <div class="card mb-5 wow fadeInUp" data-wow-delay=".4s">
+                <div class="card-body p-5">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="md-form">
+                                            <input  id="id" type="hidden" name="id" value="<?php echo $id;?>" />
+                                            <input class="form-control" id="nombre"  type="text" name="nombre" required="required"/>
+                                            <label for="name">Tu nombre</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="md-form">
+                                            <input class="form-control" id="email" type="text" name="correo" required="required"/>
+                                            <label for="email">Tu correo</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="md-form">
+                                            <input class="form-control" id="telfono" type="text" name="telefono" required="required"/>
+                                            <label for="telfono">Telefono</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                <div class="col-md-4">
+                                    <div class="md-form">
+                                        <input class="form-control" id="ciudad" type="text" name="ciudad" required="required"/>
+                                        <label for="ciudad">Ciudad</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form">
+                                        <input class="form-control" id="carro" readonly value="<?php echo $nombreCarro;?>" type="text" name="carro" required="required"/>
+                                        <label for="name">Carro</label>
+                                    </div>
+                                </div>
+
+
+                        </div>
+                                <div class="center-on-small-only mb-4">
+                                    <button class="btn btn-indigo ml-0" name="comprar" type="submit"><i class="fa fa-shopping-cart mr-2"></i> Comprar</button>
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
