@@ -23,20 +23,32 @@
             $marca = $_POST["marca"];
             $tipo = $_POST["tipo"];
             $precio = $_POST["precio"];
-            $descripcion = $_POST["descripcion"];
 
-            $sql = "insert into carro (nombre, modelo, marca_id, tipo_carro_id, precio, descripcion)
-                    values (:nombre, :modelo, :marca, :tipo, :precio, :descripcion)";
+            $nombreImagen = $_FILES['foto']['name'];
+            $carpetaDestino = $_SERVER['DOCUMENT_ROOT'].'/alexphp/img/cars/';
+
+            //movemos la imagen a la carpeta destino.
+            move_uploaded_file($_FILES['foto']['tmp_name'], $carpetaDestino.$nombreImagen);
+            $urlFoto = $nombreImagen;
+
+
+
+
+        $descripcion = $_POST["descripcion"];
+
+            $sql = "insert into carro (nombre, modelo, marca_id, tipo_carro_id, precio, url_foto, descripcion)
+                    values (:nombre, :modelo, :marca, :tipo, :precio, :url, :descripcion)";
 
             $resultado = $base->prepare($sql);
 
             $resultado->execute(array(":nombre"=>$nombre, ":modelo"=>$modelo, ":marca"=>$marca, ":tipo"=>$tipo,
-                                        ":precio"=>$precio, ":descripcion"=>$descripcion));
+                                        ":precio"=>$precio, ":url"=>$urlFoto, ":descripcion"=>$descripcion));
 
-            header("location:listarCarros.php");
+            //header("location:listarCarros.php");
 
         }
 ?>
+
 <body>
 <header>
     <?php include 'base/nav.html';?>
@@ -52,7 +64,7 @@
                 <div class="card-body p-5">
                     <div class="row">
                         <div class="col-md-12   ">
-                            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
+                            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="md-form">
@@ -106,6 +118,12 @@
                                         <div class="md-form">
                                             <input class="form-control" id="precio"  type="text" name="precio" required="required"/>
                                             <label for="precio">Precio</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="md-form">
+                                            <input class="form-control" id="foto"  type="file" accept="image/*" size="20" name="foto" />
+
                                         </div>
                                     </div>
                                 </div>

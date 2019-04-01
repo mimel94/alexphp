@@ -7,13 +7,29 @@
                 include 'base/nav.html';
                 include 'base/section.html';
                 include  'conexionBD.php';
+
+                $tamagnoPaginas=3;
+                $pagina=1;
+
                 /*consulta*/
-                $consultaCarros = $base->query("select carro.id as id, carro.nombre as nombre, modelo, marca.nombre as marca, tipo_carro.nombre as tipo, precio, descripcion
+                $consultaCarros = $base->query("select carro.id as id, carro.nombre as nombre, modelo, marca.nombre as marca, tipo_carro.nombre as tipo, precio, url_foto, descripcion
                 from carro inner join marca on carro.marca_id=marca.id
-                inner join tipo_carro on carro.tipo_carro_id=tipo_carro.id order by carro.id asc;");
+                inner join tipo_carro on carro.tipo_carro_id=tipo_carro.id order by carro.id asc ;");
 
                 /*resultado*/
+
                 $resultadoCarros = $consultaCarros->fetchAll(PDO::FETCH_OBJ);
+
+                /*paginacion no completa
+                $numFilas = count($resultadoCarros);
+
+                $totalPaginas = ceil($numFilas/$tamagnoPaginas);
+                echo "numero de registos son: ".$numFilas."<br>";
+                echo "mostramos ".$tamagnoPaginas." registros por pagina <br>";
+                echo "Mostrando la pagina ".$pagina." de ".$totalPaginas."<br>";
+
+                $consultaCarros->closeCursor();
+                */
 
         ?>
     </header>
@@ -65,7 +81,7 @@
 
                     <div class="column col-lg-4 col-md-12 mb-r">
                         <div class=" wow zoomIn card ">
-                            <img src="img/cars/prado.jpg" alt="Mountains" style="width:100%">
+                            <img src="img/cars/<?php echo $carro->url_foto; ?>" alt="Mountains" style="width:100%">
                             <br/>
                             <h3><?php echo $carro->nombre; ?></h3>
                             <p>Modelo <?php echo $carro->modelo; ?></p>
