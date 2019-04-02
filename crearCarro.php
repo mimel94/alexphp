@@ -44,7 +44,7 @@
             $resultado->execute(array(":nombre"=>$nombre, ":modelo"=>$modelo, ":marca"=>$marca, ":tipo"=>$tipo,
                                         ":precio"=>$precio, ":url"=>$urlFoto, ":descripcion"=>$descripcion));
 
-            //header("location:listarCarros.php");
+            header("location:listarCarros.php");
 
         }
 ?>

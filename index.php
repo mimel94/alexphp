@@ -81,7 +81,7 @@
 
                     <div class="column col-lg-4 col-md-12 mb-r">
                         <div class=" wow zoomIn card ">
-                            <img src="img/cars/<?php echo $carro->url_foto; ?>" alt="Mountains" style="width:100%">
+                            <img src="img/cars/<?php echo $carro->url_foto; ?>" alt="Mountains" style="width:100%;height: 220px;">
                             <br/>
                             <h3><?php echo $carro->nombre; ?></h3>
                             <p>Modelo <?php echo $carro->modelo; ?></p>

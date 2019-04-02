@@ -13,7 +13,7 @@
 
             $consultaTipoCarro =$base->query("select id, nombre from tipo_carro order by id asc");
 
-            $consultaCarro =$base->query("select id, nombre, modelo, marca_id as marca, tipo_carro_id as tipo, precio, descripcion from carro
+            $consultaCarro =$base->query("select id, nombre, modelo, marca_id as marca, tipo_carro_id as tipo, precio, url_foto, descripcion from carro
                                         where id='$id'");
 
             /*resultado*/
@@ -35,15 +35,43 @@
             $precio = $_POST["precio"];
             $descripcion = $_POST["descripcion"];
 
-            $sql="update carro set nombre=:nombre, modelo=:modelo, marca_id=:marca, tipo_carro_id=:tipo,
-                    precio=:precio, descripcion=:descripcion where id=:id";
+            $nombreImagen = $_FILES['foto']['name'];
 
-            $resultado = $base->prepare($sql);
+            if(empty($nombreImagen)){
+                $sql="update carro set nombre=:nombre, modelo=:modelo, marca_id=:marca, tipo_carro_id=:tipo,
+                precio=:precio, descripcion=:descripcion where id=:id";
 
-            $resultado->execute(array(":id"=>$id, ":nombre"=>$nombre, ":modelo"=>$modelo, ":marca"=>$marca,
-                                      ":tipo"=>$tipo, ":precio"=>$precio, ":descripcion"=>$descripcion));
+                $resultado = $base->prepare($sql);
 
+                $resultado->execute(array(":id"=>$id, ":nombre"=>$nombre, ":modelo"=>$modelo, ":marca"=>$marca,
+                ":tipo"=>$tipo, ":precio"=>$precio, ":descripcion"=>$descripcion));
+
+
+
+            }else{
+
+                $nombreImagen = $_FILES['foto']['name'];
+                $carpetaDestino = $_SERVER['DOCUMENT_ROOT'].'/alexphp/img/cars/';
+
+                //movemos la imagen a la carpeta destino.
+                move_uploaded_file($_FILES['foto']['tmp_name'], $carpetaDestino.$nombreImagen);
+                $urlFoto = $nombreImagen;
+
+                $sql="update carro set nombre=:nombre, modelo=:modelo, marca_id=:marca, tipo_carro_id=:tipo,
+                precio=:precio, url_foto=:foto, descripcion=:descripcion where id=:id";
+
+                $resultado = $base->prepare($sql);
+
+                $resultado->execute(array(":id"=>$id, ":nombre"=>$nombre, ":modelo"=>$modelo, ":marca"=>$marca,
+                ":tipo"=>$tipo, ":precio"=>$precio, ":foto"=>$urlFoto, ":descripcion"=>$descripcion));
+
+
+
+
+            }
             header("location:listarCarros.php");
+
+
 
         }
         ?>
@@ -62,7 +90,7 @@
                 <div class="card-body p-5">
                     <div class="row">
                         <div class="col-md-12   ">
-                            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST">
+                            <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="md-form">
@@ -119,12 +147,22 @@
                                             <label for="precio">Precio</label>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="md-form">
+                                            <input class="form-control" id="foto_update"  type="file" accept="image/*"  name="foto" />
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="md-form">
-                                            <textarea class="md-textarea" id="descripcion" value="" name="descripcion" required="required"> <?php echo $resultadoCarro['descripcion']?></textarea>
+                                            <textarea class="md-textarea" id="descripcion" value="" name="descripcion" required="required"><?php echo $resultadoCarro['descripcion']?></textarea>
                                             <label for="descripcion">Descripción</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="md-form">
+                                            <img src="img/cars/<?php echo $resultadoCarro['url_foto']?>" style="width: 50%" alt=""/>
                                         </div>
                                     </div>
                                 </div>

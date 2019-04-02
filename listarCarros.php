@@ -5,7 +5,7 @@
         include  'conexionBD.php';
 
         /*consulta*/
-        $consultaCarros = $base->query("select carro.id as id, carro.nombre as nombre, modelo, marca.nombre as marca, tipo_carro.nombre as tipo, precio, descripcion
+        $consultaCarros = $base->query("select carro.id as id, carro.nombre as nombre, modelo, marca.nombre as marca, tipo_carro.nombre as tipo, precio, url_foto, descripcion
                                         from carro inner join marca on carro.marca_id=marca.id
                                         inner join tipo_carro on carro.tipo_carro_id=tipo_carro.id order by carro.id asc;");
 
@@ -38,7 +38,7 @@
                                 <th>Descripción</th>
                                 <th>Foto</th>
                                 <th></th>
-                                <th></th>
+                                <th><a  href="crearCarro.php"><img src="img/nuevo.png" style="width: 20px;" /></a></th>
                             </tr>
                             </thead>
 
@@ -52,7 +52,7 @@
                                 <td><?php echo $carro->tipo; ?></td>
                                 <td><?php echo $carro->precio; ?></td>
                                 <td><?php echo $carro->descripcion; ?></td>
-                                <td>X</td>
+                                <td><img src="img/cars/<?php echo $carro->url_foto?>" alt="" style="width: 200px"/></td>
                                 <td><a href="actualizarCarro.php?id=<?php echo $carro->id?>;"><img src="img/editar.png" style="width:20px" alt="editar"/></a></td>
                                 <th><a href="borrarCarro.php?id=<?php echo $carro->id?>;"><img src="img/delete.png" style="width:20px" alt="editar"/></a></th>
                             </tr>
